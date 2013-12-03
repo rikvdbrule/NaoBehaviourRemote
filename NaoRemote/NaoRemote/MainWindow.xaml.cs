@@ -35,6 +35,7 @@ namespace NaoRemote
 
         private int SubjectNumber;
 
+		//constructor
         public MainWindow()
         {
             InitializeComponent();
@@ -43,6 +44,7 @@ namespace NaoRemote
             SetWozButtonsEnabled(false);
         }
 
+		//callback method to wait for a running behavior on the robot to finish
         private void WaitForBehaviorToFinish(int ID)
         {
             bool continueWaiting = BehaviorManagerProxy.isRunning(ID);
@@ -57,6 +59,7 @@ namespace NaoRemote
             }
         }
 
+		//callback for behavior button events in the MainWindow
         private void BehaviorButtonHandler(object sender, RoutedEventArgs e)
         {
             string behaviorName = TextBoxNaoBehaviorRoot.Text + (string)((Button)sender).Tag;
@@ -71,12 +74,14 @@ namespace NaoRemote
             }
         }
 
+		//callback for stop button clicks
         private void StopButtonHandler(object sender, RoutedEventArgs e)
         {
             CurrentlyRunningLabel.Content = "Stopping all behaviors...";
             StopAllBehaviors();
         }
 
+		//callback for behavior sequence button event
         private void BehaviorSequenceHandler(object sender, RoutedEventArgs e)
         {
             if(TrialSequence.Count > 0) {
@@ -91,6 +96,7 @@ namespace NaoRemote
                     "Trials Completed");
         }
 
+		//run a behavior on the robot
         private void RunBehavior(string behaviorName)
         {
             CurrentlyRunningLabel.Content = "Currently Running: " + behaviorName;
@@ -100,6 +106,7 @@ namespace NaoRemote
                 new BehaviorWaiterDelegate(WaitForBehaviorToFinish), ID);
         }
 
+		//start a sequence of behaviors
         private void RunBehaviorSequence()
         {
             if (!VideoRecorderProxy.isRecording())
@@ -109,6 +116,7 @@ namespace NaoRemote
             RunBehavior(behaviorToRun);
         }
 
+		//interface logic after a behavior finished
         private void BehaviorFinished()
         {
             if (currentSequence.Count > 0)
@@ -117,11 +125,13 @@ namespace NaoRemote
                 UpdateUserInterfaceAfterBehaviorRun();
         }
 
+		//callback to update the sequence button text
         private void UpdateSequenceButtonContext()
         {
             SequenceButton.Content = "Next Trial (" + TrialSequence.Count + ")";
         }
 
+		//callback to update the interface after a behavior finished
         private void UpdateUserInterfaceAfterBehaviorRun()
         {
             CurrentlyRunningLabel.Content = "Currently Running: None";
@@ -129,6 +139,7 @@ namespace NaoRemote
                 SequenceButton.IsEnabled = true;
         }
 
+		//stop all behaviors on the robot
         private void StopAllBehaviors()
         {
             try
@@ -139,6 +150,7 @@ namespace NaoRemote
             finally { }
         }
 
+		//try to connect to robot after network settings change 
         private void NetworkSettingsUpdated(object sender, RoutedEventArgs e)
         {
             try
@@ -157,6 +169,7 @@ namespace NaoRemote
             }
         }
 
+		//start video recording on the Nao robot; file is saved on the robot
         private void StartVideoRecording()
         {
             VideoRecorderProxy.setFrameRate(Properties.Settings.Default.FrameRate);
@@ -165,6 +178,9 @@ namespace NaoRemote
             VideoRecorderProxy.startRecording(Properties.Settings.Default.VideoDirectory,CreateVideoFileName());
         }
 
+		#part logging
+		
+		//write log file header
         private void WriteLogFileHeader(StreamWriter writer)
         {
             string sep = Properties.Settings.Default.CSVFieldSeparator;
@@ -184,6 +200,7 @@ namespace NaoRemote
             writer.WriteLine("");
         }
         
+        //write log file data
         private void WriteLogFileData(StreamWriter writer, string behaviorName)
         {
             string sep = Properties.Settings.Default.CSVFieldSeparator;
@@ -205,7 +222,8 @@ namespace NaoRemote
             writer.WriteLine("");
 
         }
-
+		
+		//log the experimental data
         private void LogBehavior(string behaviorName)
         {
             string logFilePath = Path.Combine(Directory.GetCurrentDirectory(), Properties.Settings.Default.LogFileName);
@@ -229,12 +247,15 @@ namespace NaoRemote
         }
 
 
-
+		//create a video file name
         private string CreateVideoFileName()
         {
             return Properties.Settings.Default.VideoFilePrefix + SubjectNumber + Properties.Settings.Default.VideoFileSuffix;
         }
 
+		#part connect
+		
+		//dispose of all proxies connected to the Nao
         private void DisposeOfAllProxies()
         {
             if (TextToSpeechProxy != null)
@@ -251,6 +272,7 @@ namespace NaoRemote
             }
         }
 
+		//connect to the Nao robot
         private void ConnectToNao(string nao_ip_address, int nao_port)
         {
             bool success = true;
@@ -269,6 +291,7 @@ namespace NaoRemote
                 new UpdateInterfaceAfterConnectDelegate(UpdateUserInterfaceAfterConnect), success);
         }
 
+		//callback to update user interface after connect
         private void UpdateUserInterfaceAfterConnect(bool success)
         {
             if (success)
@@ -281,7 +304,8 @@ namespace NaoRemote
             ConnectButton.Content = "Connect";
             SetWozButtonsEnabled(true);
         }
-
+		
+		//toggle to enable/disable the behavior buttons
         private void SetWozButtonsEnabled(bool enabled)
         {
             BehaviorButton1.IsEnabled = enabled;
@@ -297,17 +321,20 @@ namespace NaoRemote
             SayButton.IsEnabled = enabled;
         }
 
+		//callback on window close
         private void InterfaceWindowClosing(object sender, CancelEventArgs e)
         {
             DisposeOfAllProxies();
             Properties.Settings.Default.Save();
         }
 
+		//let the nao say words in the text field
         private void SayWords(object sender, RoutedEventArgs e)
         {
             this.TextToSpeechProxy.post.say(words_to_say.Text);
         }
 
+		//set the subject number
         internal void SetSubjectNumber(int SubjectNumber)
         {
             this.SubjectNumber = SubjectNumber;
