@@ -47,22 +47,65 @@ namespace NaoRemote
 
         static public TrialSequence CreateUnpredictiveTrialSequence()
         {
-            return CreatePredictiveTrialSequence();
+            TrialSequence seq = new TrialSequence();
+            
+            //behavioral cue on, push
+            seq.Add(BehaviorSequence.PointRightCueSequence());
+
+            //behavioral cue on, point
+            for(int i = 0; i < 3; i +=1)
+            {
+				seq.Add(BehaviorSequence.PointLeftCueSequence());
+                seq.Add(BehaviorSequence.PointRightCueSequence());
+				
+            }
+
+            //behavioral cue off, push
+            for(int i = 0; i < 3; i +=1)
+			{
+            	seq.Add(BehaviorSequence.PushLeftNoCueSequence());
+                seq.Add(BehaviorSequence.PushRightNoCueSequence());
+            }
+            
+            //behavioral cue off, point
+            for (int i = 0; i < 18; i += 1)
+            {
+                seq.Add(BehaviorSequence.PointLeftNoCueSequence());
+                seq.Add(BehaviorSequence.PointRightNoCueSequence());
+            }
+            
+            seq.nTrials = seq.Count;
+            seq.Name = "Unpredictive";
+            seq.Shuffle();
+            return seq;
         }
 
         static public TrialSequence CreatePredictiveTrialSequence()
         {
             TrialSequence seq = new TrialSequence();
-            for(int i = 0; i < 2; i +=1)
+            
+            //behavioral cue on, push
+            for(int i = 0; i < 3; i +=1)
             {
                 seq.Add(BehaviorSequence.PushLeftCueSequence());
                 seq.Add(BehaviorSequence.PushRightCueSequence());
             }
-            for (int i = 0; i < 5; i += 1)
+            
+            //behavioral cue on, point
+            seq.Add(BehaviorSequence.PointRightCueSequence());
+            
+            //behavioral cue off, push
+            seq.Add(BehaviorSequence.PushLeftNoCueSequence());
+            
+            //behavioral cue off, point
+            for (int i = 0; i < 20; i += 1)
             {
                 seq.Add(BehaviorSequence.PointLeftNoCueSequence());
                 seq.Add(BehaviorSequence.PointRightNoCueSequence());
             }
+            seq.Add(BehaviorSequence.PointLeftNoCueSequence());
+            
+            
             seq.nTrials = seq.Count;
             seq.Name = "Predictive";
             seq.Shuffle();
