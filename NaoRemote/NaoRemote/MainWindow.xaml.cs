@@ -34,6 +34,7 @@ namespace NaoRemote
         private TrialSequence TrialSequence; 
 
         private int SubjectNumber;
+        private bool recording = false;
 
 		//constructor
         public MainWindow()
@@ -109,8 +110,10 @@ namespace NaoRemote
 		//start a sequence of behaviors
         private void RunBehaviorSequence()
         {
-            if (!VideoRecorderProxy.isRecording())
-                    StartVideoRecording();
+            if (!recording)
+            {
+                StartVideoRecording();
+            }
             string behaviorToRun = currentSequence.First();
             currentSequence.Remove(behaviorToRun);
             RunBehavior(behaviorToRun);
@@ -176,9 +179,10 @@ namespace NaoRemote
             VideoRecorderProxy.setResolution(Properties.Settings.Default.VideoResolution);
             VideoRecorderProxy.setVideoFormat(Properties.Settings.Default.VideoFormat);
             VideoRecorderProxy.startRecording(Properties.Settings.Default.VideoDirectory,CreateVideoFileName());
+            recording = true;
         }
 
-		#part logging
+		#region logging
 		
 		//write log file header
         private void WriteLogFileHeader(StreamWriter writer)
@@ -252,10 +256,10 @@ namespace NaoRemote
         {
             return Properties.Settings.Default.VideoFilePrefix + SubjectNumber + Properties.Settings.Default.VideoFileSuffix;
         }
+        #endregion
+        #region connect
 
-		#part connect
-		
-		//dispose of all proxies connected to the Nao
+        //dispose of all proxies connected to the Nao
         private void DisposeOfAllProxies()
         {
             if (TextToSpeechProxy != null)
@@ -266,7 +270,7 @@ namespace NaoRemote
                 LedsProxy.Dispose();
             if (VideoRecorderProxy != null)
             {
-                if (VideoRecorderProxy.isRecording())
+                if (recording)
                     VideoRecorderProxy.stopRecording();
                 VideoRecorderProxy.Dispose();
             }
@@ -304,8 +308,9 @@ namespace NaoRemote
             ConnectButton.Content = "Connect";
             SetWozButtonsEnabled(true);
         }
-		
-		//toggle to enable/disable the behavior buttons
+
+        #endregion
+        //toggle to enable/disable the behavior buttons
         private void SetWozButtonsEnabled(bool enabled)
         {
             BehaviorButton1.IsEnabled = enabled;
