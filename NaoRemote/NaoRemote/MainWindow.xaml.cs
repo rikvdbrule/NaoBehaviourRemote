@@ -332,6 +332,7 @@ namespace NaoRemote
 		//callback on window close
         private void InterfaceWindowClosing(object sender, CancelEventArgs e)
         {
+            this.Hide();
             DisposeOfAllProxies();
             Properties.Settings.Default.Save();
         }
