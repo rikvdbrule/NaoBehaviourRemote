@@ -175,10 +175,13 @@ namespace NaoRemote
 		//start video recording on the Nao robot; file is saved on the robot
         private void StartVideoRecording()
         {
-            VideoRecorderProxy.setFrameRate(Properties.Settings.Default.FrameRate);
-            VideoRecorderProxy.setResolution(Properties.Settings.Default.VideoResolution);
-            VideoRecorderProxy.setVideoFormat(Properties.Settings.Default.VideoFormat);
-            VideoRecorderProxy.startRecording(Properties.Settings.Default.VideoDirectory,CreateVideoFileName());
+            if (!VideoRecorderProxy.isRecording())
+            {
+                VideoRecorderProxy.setFrameRate(Properties.Settings.Default.FrameRate);
+                VideoRecorderProxy.setResolution(Properties.Settings.Default.VideoResolution);
+                VideoRecorderProxy.setVideoFormat(Properties.Settings.Default.VideoFormat);
+                VideoRecorderProxy.startRecording(Properties.Settings.Default.VideoDirectory, CreateVideoFileName());
+            }
             recording = true;
         }
 
@@ -343,13 +346,18 @@ namespace NaoRemote
         internal void SetSubjectNumber(int SubjectNumber)
         {
             this.SubjectNumber = SubjectNumber;
-            if(SubjectNumber % 2 == 0) 
+            if (SubjectNumber == -1)
+                this.TrialSequence = TrialSequence.CreateTestSequence();
+            else
             {
-                this.TrialSequence = TrialSequence.CreatePredictiveTrialSequence();
-            }
-            else 
-            {
-                this.TrialSequence = TrialSequence.CreateUnpredictiveTrialSequence();
+                if (SubjectNumber % 2 == 0)
+                {
+                    this.TrialSequence = TrialSequence.CreatePredictiveTrialSequence();
+                }
+                else
+                {
+                    this.TrialSequence = TrialSequence.CreateUnpredictiveTrialSequence();
+                }
             }
             UpdateSequenceButtonContext();
         }

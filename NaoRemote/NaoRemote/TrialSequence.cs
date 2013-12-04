@@ -112,6 +112,24 @@ namespace NaoRemote
             return seq;
         }
 
+        public static TrialSequence CreateTestSequence()
+        {
+            TrialSequence seq = new TrialSequence();
+
+
+            seq.Add(BehaviorSequence.PushLeftNoCueSequence());
+            seq.Add(BehaviorSequence.PushRightNoCueSequence());
+            seq.Add(BehaviorSequence.PointRightCueSequence());
+            seq.Add(BehaviorSequence.PointLeftCueSequence());
+            seq.Add(BehaviorSequence.PointRightNoCueSequence());
+            seq.Add(BehaviorSequence.PointLeftNoCueSequence());
+            seq.Add(BehaviorSequence.PushLeftCueSequence());
+            seq.Add(BehaviorSequence.PushRightCueSequence());
+            seq.nTrials = seq.Count;
+            seq.Name = "Test";
+            return seq;
+        }
+
         public static class ThreadSafeRandom
         {
             [ThreadStatic]
