@@ -59,16 +59,17 @@ namespace NaoRemote
                 seq.Add(BehaviorSequence.PointRightCueSequence());
 				
             }
-
+			
             //behavioral cue off, push
-            for(int i = 0; i < 3; i +=1)
+            for(int i = 0; i < 2; i +=1)
 			{
             	seq.Add(BehaviorSequence.PushLeftNoCueSequence());
                 seq.Add(BehaviorSequence.PushRightNoCueSequence());
             }
-            
+            seq.Add(BehaviorSequence.PushLeftNoCueSequence());
+
             //behavioral cue off, point
-            for (int i = 0; i < 18; i += 1)
+            for (int i = 0; i < 15; i += 1)
             {
                 seq.Add(BehaviorSequence.PointLeftNoCueSequence());
                 seq.Add(BehaviorSequence.PointRightNoCueSequence());
@@ -95,15 +96,15 @@ namespace NaoRemote
                 seq.Add(BehaviorSequence.PushLeftCueSequence());
                 seq.Add(BehaviorSequence.PushRightCueSequence());
             }
-            
+                        
             //behavioral cue on, point
             seq.Add(BehaviorSequence.PointRightCueSequence());
-            
+     
             //behavioral cue off, push
-            seq.Add(BehaviorSequence.PushLeftNoCueSequence());
-            
+			//not in this sequence
+			            
             //behavioral cue off, point
-            for (int i = 0; i < 20; i += 1)
+            for (int i = 0; i < 17; i += 1)
             {
                 seq.Add(BehaviorSequence.PointLeftNoCueSequence());
                 seq.Add(BehaviorSequence.PointRightNoCueSequence());
