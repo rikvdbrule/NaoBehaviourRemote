@@ -50,7 +50,7 @@ namespace NaoRemote
             TrialSequence seq = new TrialSequence();
             
             //behavioral cue on, push
-            seq.Add(BehaviorSequence.PointRightCueSequence());
+            seq.Add(BehaviorSequence.PushRightCueSequence());
 
             //behavioral cue on, point
             for(int i = 0; i < 3; i +=1)
