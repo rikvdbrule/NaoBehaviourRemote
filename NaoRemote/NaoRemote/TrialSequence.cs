@@ -74,9 +74,14 @@ namespace NaoRemote
                 seq.Add(BehaviorSequence.PointRightNoCueSequence());
             }
             
+            seq.Shuffle();
+
+            //add two practise trials
+            seq.Insert(0, BehaviorSequence.PointLeftNoCueSequence());
+            seq.Insert(0, BehaviorSequence.PointRightNoCueSequence());
+
             seq.nTrials = seq.Count;
             seq.Name = "Unpredictive";
-            seq.Shuffle();
             return seq;
         }
 
@@ -105,10 +110,15 @@ namespace NaoRemote
             }
             seq.Add(BehaviorSequence.PointLeftNoCueSequence());
             
-            
+            seq.Shuffle();
+
+            //add two practise trials
+            seq.Insert(0, BehaviorSequence.PointLeftNoCueSequence());
+            seq.Insert(0, BehaviorSequence.PointRightNoCueSequence());
+
             seq.nTrials = seq.Count;
             seq.Name = "Predictive";
-            seq.Shuffle();
+            
             return seq;
         }
 
