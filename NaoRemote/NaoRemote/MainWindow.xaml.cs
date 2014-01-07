@@ -36,7 +36,6 @@ namespace NaoRemote
 
         private int SubjectNumber;
         private bool recording = false;
-        private bool RestAfterBehaviorFinished = false;
 
 		//constructor
         public MainWindow()
@@ -68,17 +67,12 @@ namespace NaoRemote
             string behaviorName = TextBoxNaoBehaviorRoot.Text + (string)((Button)sender).Tag;
             if (BehaviorManagerProxy.isBehaviorPresent(behaviorName))
             {
-                MotionProxy.wakeUp();
                 RunBehavior(behaviorName);
             }
             else
             {
                 MessageBox.Show("The behavior \"" + behaviorName + "\" was not located on Nao.",
                     "Unknown Behavior");
-            }
-            if (behaviorName.Equals("contingency/end_experiment"))
-            {
-                RestAfterBehaviorFinished = true;
             }
         }
 
@@ -107,6 +101,7 @@ namespace NaoRemote
 		//run a behavior on the robot
         private void RunBehavior(string behaviorName)
         {
+            MotionProxy.wakeUp();
             CurrentlyRunningLabel.Content = "Currently Running: " + behaviorName;
             int ID = BehaviorManagerProxy.post.runBehavior(behaviorName);
             LogBehavior(behaviorName);
@@ -132,11 +127,9 @@ namespace NaoRemote
             if (currentSequence.Count > 0)
                 RunBehaviorSequence();
             else
-                UpdateUserInterfaceAfterBehaviorRun();
-            if (RestAfterBehaviorFinished)
             {
+                UpdateUserInterfaceAfterBehaviorRun();
                 MotionProxy.rest();
-                RestAfterBehaviorFinished = false;
             }
         }
 
