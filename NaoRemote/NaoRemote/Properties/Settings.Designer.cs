@@ -154,5 +154,14 @@ namespace NaoRemote.Properties {
                 return ((string)(this["CSVFieldSeparator"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("75")]
+        public int AudioOutputVolume {
+            get {
+                return ((int)(this["AudioOutputVolume"]));
+            }
+        }
     }
 }

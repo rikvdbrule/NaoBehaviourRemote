@@ -29,6 +29,7 @@ namespace NaoRemote
         private LedsProxy LedsProxy;
         private VideoRecorderProxy VideoRecorderProxy;
         private MotionProxy MotionProxy;
+        private AudioDeviceProxy AudioProxy;
 
         //behavior and trial sequences
         private BehaviorSequence currentSequence = BehaviorSequence.EmptyBehaviorSequence();
@@ -102,6 +103,7 @@ namespace NaoRemote
         private void RunBehavior(string behaviorName)
         {
             MotionProxy.wakeUp();
+            AudioProxy.setOutputVolume(Properties.Settings.Default.AudioOutputVolume);
             CurrentlyRunningLabel.Content = "Currently Running: " + behaviorName;
             int ID = BehaviorManagerProxy.post.runBehavior(behaviorName);
             LogBehavior(behaviorName);
@@ -284,6 +286,8 @@ namespace NaoRemote
             }
             if (MotionProxy != null)
                 MotionProxy.Dispose();
+            if (AudioProxy != null)
+                AudioProxy.Dispose();
         }
 
 		//connect to the Nao robot
@@ -297,6 +301,7 @@ namespace NaoRemote
                 LedsProxy = new LedsProxy(nao_ip_address, nao_port);
                 VideoRecorderProxy = new VideoRecorderProxy(nao_ip_address, nao_port);
                 MotionProxy = new MotionProxy(nao_ip_address, nao_port);
+                AudioProxy = new AudioDeviceProxy(nao_ip_address, nao_port);
             }
             catch (Exception)
             {
