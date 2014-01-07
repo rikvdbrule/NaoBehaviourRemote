@@ -28,6 +28,7 @@ namespace NaoRemote
         private BehaviorManagerProxy BehaviorManagerProxy;
         private LedsProxy LedsProxy;
         private VideoRecorderProxy VideoRecorderProxy;
+        private MotionProxy MotionProxy;
 
         //behavior and trial sequences
         private BehaviorSequence currentSequence = BehaviorSequence.EmptyBehaviorSequence();
@@ -35,6 +36,7 @@ namespace NaoRemote
 
         private int SubjectNumber;
         private bool recording = false;
+        private bool RestAfterBehaviorFinished = false;
 
 		//constructor
         public MainWindow()
@@ -66,12 +68,17 @@ namespace NaoRemote
             string behaviorName = TextBoxNaoBehaviorRoot.Text + (string)((Button)sender).Tag;
             if (BehaviorManagerProxy.isBehaviorPresent(behaviorName))
             {
+                MotionProxy.wakeUp();
                 RunBehavior(behaviorName);
             }
             else
             {
                 MessageBox.Show("The behavior \"" + behaviorName + "\" was not located on Nao.",
                     "Unknown Behavior");
+            }
+            if (behaviorName.Equals("contingency/end_experiment"))
+            {
+                RestAfterBehaviorFinished = true;
             }
         }
 
@@ -126,6 +133,11 @@ namespace NaoRemote
                 RunBehaviorSequence();
             else
                 UpdateUserInterfaceAfterBehaviorRun();
+            if (RestAfterBehaviorFinished)
+            {
+                MotionProxy.rest();
+                RestAfterBehaviorFinished = false;
+            }
         }
 
 		//callback to update the sequence button text
@@ -277,6 +289,8 @@ namespace NaoRemote
                     VideoRecorderProxy.stopRecording();
                 VideoRecorderProxy.Dispose();
             }
+            if (MotionProxy != null)
+                MotionProxy.Dispose();
         }
 
 		//connect to the Nao robot
@@ -289,6 +303,7 @@ namespace NaoRemote
                 BehaviorManagerProxy = new BehaviorManagerProxy(nao_ip_address, nao_port);
                 LedsProxy = new LedsProxy(nao_ip_address, nao_port);
                 VideoRecorderProxy = new VideoRecorderProxy(nao_ip_address, nao_port);
+                MotionProxy = new MotionProxy(nao_ip_address, nao_port);
             }
             catch (Exception)
             {
@@ -324,6 +339,7 @@ namespace NaoRemote
             BehaviorButton6.IsEnabled = enabled;
             BehaviorButton7.IsEnabled = enabled;
             BehaviorButton8.IsEnabled = enabled;
+            BehaviorButton9.IsEnabled = enabled;
             SequenceButton.IsEnabled = enabled;
             StopAllBehaviorsButton.IsEnabled = enabled;
             SayButton.IsEnabled = enabled;
