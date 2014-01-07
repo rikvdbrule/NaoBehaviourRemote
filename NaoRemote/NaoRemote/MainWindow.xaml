@@ -41,6 +41,7 @@
                          Text="{Binding Source={x:Static properties:Settings.Default}, Path=TextToSpeechSentence}" />
                 <Button Name="SayButton" Tag="say" Content="Say it" HorizontalAlignment="Left" Margin="420,376,0,0" VerticalAlignment="Top" Width="81" Height="42" Click="SayWords"/>
                 <Label Name="CurrentlyRunningLabel" Width="300" Height="30" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Right">Currently Running: None</Label>
+                <Button x:Name="BehaviorButton9" Tag="end_experiment" Content="End" HorizontalAlignment="Left" Margin="66,300,0,0" VerticalAlignment="Top" Width="82" Height="47" RenderTransformOrigin="1.147,0.47" Click="BehaviorButtonHandler"/>
             </Grid>
         </TabItem>
     </TabControl>
