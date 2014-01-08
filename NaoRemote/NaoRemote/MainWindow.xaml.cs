@@ -204,6 +204,8 @@ namespace NaoRemote
             writer.Write(sep);
             writer.Write("Time");
             writer.Write(sep);
+            writer.Write("Timestamp");
+            writer.Write(sep);
             writer.Write("Sequence");
             writer.Write(sep);
             writer.Write("TrialNumber");
@@ -220,11 +222,14 @@ namespace NaoRemote
             string sep = Properties.Settings.Default.CSVFieldSeparator;
             string date = System.DateTime.Now.ToString("dd-MM-yyyy");
             string time = System.DateTime.Now.ToString("HH:mm:ss");
+            long timestamp = System.DateTime.Now.Ticks;
             writer.Write(this.SubjectNumber);
             writer.Write(sep);
             writer.Write(date);
             writer.Write(sep);
             writer.Write(time);
+            writer.Write(sep);
+            writer.Write(timestamp);
             writer.Write(sep);
             writer.Write(TrialSequence.GetName());
             writer.Write(sep);
