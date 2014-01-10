@@ -219,7 +219,7 @@ namespace NaoRemote
         {
             string sep = Properties.Settings.Default.CSVFieldSeparator;
             string date = System.DateTime.Now.ToString("dd-MM-yyyy");
-            string time = System.DateTime.Now.ToString("HH:mm:ss");
+            string time = System.DateTime.Now.ToString("HH:mm:ss:fff");
             writer.Write(this.SubjectNumber);
             writer.Write(sep);
             writer.Write(date);
