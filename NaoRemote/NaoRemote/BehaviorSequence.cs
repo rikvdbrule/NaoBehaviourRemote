@@ -15,6 +15,7 @@ namespace NaoRemote
         private const string BASE_DIR = "contingency/";
         private const string LOOK_BEHAVIOR = BASE_DIR + "look";
         private const string CUE_BEHAVIOR = BASE_DIR + "cue";
+        private const string NO_CUE_BEHAVIOR = BASE_DIR + "no_cue";
         private const string POINT_RIGHT_BEHAVIOR = BASE_DIR + "point_right";
         private const string POINT_LEFT_BEHAVIOR = BASE_DIR + "point_left";
         private const string PUSH_RIGHT_BEHAVIOR = BASE_DIR + "push_right";
@@ -48,7 +49,7 @@ namespace NaoRemote
             sec.Add(LOOK_BEHAVIOR);
             switch (c)
             {
-                case Cue.NO_CUE: break;
+                case Cue.NO_CUE: sec.Add(NO_CUE_BEHAVIOR); break;
                 case Cue.CUE: sec.Add(CUE_BEHAVIOR); break;
             }
             switch (d)
