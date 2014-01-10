@@ -37,6 +37,7 @@ namespace NaoRemote
 
         private int SubjectNumber;
         private bool recording = false;
+        private bool RemoveStiffness = true;
 
 		//constructor
         public MainWindow()
@@ -107,6 +108,7 @@ namespace NaoRemote
             CurrentlyRunningLabel.Content = "Currently Running: " + behaviorName;
             int ID = BehaviorManagerProxy.post.runBehavior(behaviorName);
             LogBehavior(behaviorName);
+            RemoveStiffness = behaviorName != "contingency/introduction";
             CurrentlyRunningLabel.Dispatcher.BeginInvoke(DispatcherPriority.Normal, 
                 new BehaviorWaiterDelegate(WaitForBehaviorToFinish), ID);
         }
@@ -131,7 +133,13 @@ namespace NaoRemote
             else
             {
                 UpdateUserInterfaceAfterBehaviorRun();
-                MotionProxy.rest();
+                if (RemoveStiffness)
+                {
+                    MotionProxy.rest();
+                    RemoveStiffness = false;
+                }
+                else
+                    RemoveStiffness = true;
             }
         }
 
